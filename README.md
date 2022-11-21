@@ -1,8 +1,10 @@
-# Vue 3 + Vite
+# f2e- seconed week by 2022
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+![](https://img.shields.io/badge/3.2.41-Vue-brightgreen) 
+![](https://img.shields.io/badge/3.1.8-Vite-green)
 
-## Recommended IDE Setup
+▎設計稿連結：[請點我](https://www.figma.com/file/zgXOP0rV1JOqsrtNrOCLND/WEEK3?node-id=17%3A745&t=ombpruYjW7aRh1R8-0) <br>
+▎DEMO：[進行中ING](https://3q-cindy.github.io/F2e_2022_3week/)
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
-# F2e_2022_3week-
+
+
