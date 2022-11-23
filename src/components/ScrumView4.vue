@@ -20,7 +20,7 @@ const handleModal = () => {
   model.value = 0;
 };
 const handleFinish = () => {
-  if (false) {
+  if (1) {
     model.value = 2;
   } else {
     model.value = 1;
@@ -52,7 +52,7 @@ const handleFinish = () => {
           這麼快就對Scrum瞭若指掌了，<br />
           我對你刮目相看了哦！
         </div>
-        <button type="button" class="start-btn2" @click="props.handleStep(4)">
+        <button type="button" class="start-btn2" @click="props.handleStep(5)">
           謝謝
           <img src="@/assets/start_icon2.png" alt="start" />
         </button>

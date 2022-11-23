@@ -7,17 +7,16 @@ import CharaView from './components/CharaView1.vue'
 import TestView from './components/TestView2.vue'
 import Backlog from './components/BacklogView3.vue'
 import Scrum from './components/ScrumView4.vue'
-// import RetroView from './components/RetroView5.vue'
-// import FinishView from './components/FinishView6.vue'
-const step = ref(0);
-const baise_data = reactive({name: "", gender: ""});
+import RetroView from './components/RetroView5.vue'
+import FinishView from './components/FinishView6.vue'
+const step = ref(6);
+const baise_data = reactive({name: "AAA", gender: "girl"});
 const handleStep = (num) => {
   step.value = num;
 };
 const getBasic = (names, genders) => {
   baise_data.name = names;
   baise_data.gender = genders;
-   console.log(baise_data);
 };
 </script>
 
@@ -28,5 +27,7 @@ const getBasic = (names, genders) => {
     <TestView v-if="step === 2" :handleStep="handleStep" :name="baise_data.name" />
     <Backlog v-if="step === 3" :handleStep="handleStep" />
     <Scrum v-if="step === 4" :handleStep="handleStep" />
+    <RetroView v-if="step === 5" :handleStep="handleStep" />
+    <FinishView v-if="step === 6" :handleStep="handleStep" :baise_data="baise_data" />
   </main>
 </template>

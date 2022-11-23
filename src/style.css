@@ -91,10 +91,10 @@ main{
 .chat-card + .chat-card{
   margin-top: 20px;
 }
-.chat-card, .header-card, .sort-card {
+.chat-card, .header-card, .sort-card,.radio-card, .paper-card {
   position: relative;
-  width: 500px;
-  padding: 50px 80px;
+  width: 550px;
+  padding: 50px 70px;
   border-radius: 30px;
   font-size: 20px;
   line-height: 40px;
@@ -103,7 +103,8 @@ main{
   box-shadow: 0px 4px 30px rgba(116, 48, 48, 0.4);
 }
 .header-card.yellow:before,
-.header-card.brown:before{
+.header-card.brown:before,
+.header-card.black:before{
   content: "";
   position: absolute;
   height: 150px;
@@ -118,6 +119,10 @@ main{
 .header-card.brown:before{
   background-image: url('./assets/man_brown.png');
 }
+.header-card.black:before{
+  background-image: url('./assets/man_black.png');
+}
+
 .sort-card.yellow{
   background-color: var(--btn-yellow);
 }
@@ -129,7 +134,7 @@ main{
   width: auto;
   padding: 20px 80px;
 }
-.sort-card{
+.sort-card,.radio-card{
   margin: 20px auto 0 auto;
   padding: 20px 30px;
   width: calc(50% - 10px);
@@ -168,6 +173,61 @@ main{
 .chat-card .pink{
   color: var(--btn-pink);
   font-weight: 400;
+}
+.radio-card{
+  width: 70%;
+}
+.radio-card .title{
+  font-size: 22px;
+  font-weight: 600;
+  text-align: left;
+  margin-top: 15px;
+}
+.radio-card .content{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.radio-card .radio{
+  display: block;
+  position: relative;
+  border-radius: 25px;
+  text-align: left;
+  color: var(--text-color);
+  border: 1px dashed var(--text-color);
+  font-size: 20px;
+  padding: 5px 10px;
+}
+.radio-card .radio:hover{
+   background: #F4F3F2;
+}
+.radio-card .radio.check{
+   background: #FFAC894D;
+}
+.radio-card .radio .circle{
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-color);
+  background-color: #fff;
+  margin-right: 15px;
+  transform: translateY(3px);
+}
+.radio-card .radio.check .circle::before{
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--btn-pink);
+}
+.radio-card .radio span:not(.circle){
+  display: inline-block;
 }
 
 .modal {
