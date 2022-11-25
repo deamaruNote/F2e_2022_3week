@@ -9,7 +9,8 @@ import Backlog from './components/BacklogView3.vue'
 import Scrum from './components/ScrumView4.vue'
 import RetroView from './components/RetroView5.vue'
 import FinishView from './components/FinishView6.vue'
-const step = ref(6);
+import DropList from './components/model/DropSort.vue'
+const step = ref(0);
 const baise_data = reactive({name: "AAA", gender: "girl"});
 const handleStep = (num) => {
   step.value = num;
@@ -22,6 +23,7 @@ const getBasic = (names, genders) => {
 
 <template>
   <main>
+        <!-- <DropList /> -->
     <MainView v-if="step === 0" :handleStep="handleStep" />
     <CharaView v-if="step === 1" :handleStep="handleStep" :getBasic="getBasic" />
     <TestView v-if="step === 2" :handleStep="handleStep" :name="baise_data.name" />

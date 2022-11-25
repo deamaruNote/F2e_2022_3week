@@ -11,7 +11,6 @@ const props = defineProps({
 const model = ref(0);
 const step = ref(0);
 const sum = ref(0);
-const numbers = reactive([8, 5, 4, 13]);
 const nextStep = () => {
   step.value = step.value + 1;
 };
@@ -22,11 +21,69 @@ const handleModal = () => {
   model.value = 0;
 };
 const handleFinish = () => {
-  if (1) {
+  if (sum.value > 0 && sum.value < 20) {
     model.value = 2;
   } else {
     model.value = 1;
   }
+};
+// drag
+const items = ref([
+  {
+    id: 1,
+    title: "前台職缺列表 （缺詳細內容、點選可發送應徵意願）",
+    score: 8,
+    list: 1,
+  },
+  {
+    id: 2,
+    title: "後台職缺管理功能 （資訊上架、下架、顯示應徵者資料）",
+    score: 5,
+    list: 1,
+  },
+  { id: 3, title: "會員系統（登入、註冊、管理)）", score: 4, list: 1 },
+  { id: 4, title: "應徵者的線上履歷編輯器", score: 13, list: 1 },
+]);
+const getList = (list) => {
+  let result = items.value.filter((item) => item.list === list);
+  while (result.length !== 4) {
+    if (result.length < 4) {
+      result.push({ id: 0, title: "", score: 0, list: list });
+    }
+    if (result.length > 4) {
+      result.filter(item => item.id === 0);
+    }
+  }
+  return result;
+};
+
+const startDrag = (event, item) => {
+  //
+  event.dataTransfer.dropEffect = "move";
+  event.dataTransfer.effectAllowed = "move";
+  event.dataTransfer.setData("itemID", item.id);
+};
+
+const onDrop = (event, list) => {
+  //
+  const itemID = event.dataTransfer.getData("itemID");
+  const item = items.value.find((ele) => ele.id == itemID);
+  item.list = list;
+  handleTotal();
+};
+const overDrag = (event) => {
+  //
+  event.preventDefault();
+  event.dataTransfer.dropEffect = "move";
+};
+const handleTotal = () => {
+  let total = 0;
+  items.value.map(item => {
+    if(item.list === 2){
+      total += item.score;
+    }
+  });
+  sum.value = total;
 };
 </script>
 
@@ -191,35 +248,51 @@ const handleFinish = () => {
       <div class="sort-parent">
         <div class="sort-card number">
           <h3>產品待辦清單 ProductBacklog</h3>
-          <div class="content">
+          <div
+            class="content"
+            @drop="onDrop($event, 1)"
+            @dropenter.prevent
+            @dragover="overDrag($event)"
+          >
             <span class="hint"
               >優先度高 <img src="@/assets/Vector.png" alt="top"
             /></span>
-            <div class="grid active" :data-num="numbers[0]">
-              前台職缺列表 （缺詳細內容、點選可發送應徵意願）
-            </div>
-            <div class="grid active" :data-num="numbers[1]">
-              後台職缺管理功能 （資訊上架、下架、顯示應徵者資料）
-            </div>
-            <div class="grid active" :data-num="numbers[2]">
-              會員系統（登入、註冊、管理)）
-            </div>
-            <div class="grid active" :data-num="numbers[3]">
-              應徵者的線上履歷編輯器
-            </div>
+            <span
+              v-for="(item, index) in getList(1)"
+              :key="index"
+              :class="{'grid':true, 'active': item.id !== 0}"
+              draggable="true"
+              :data-sort="item.id"
+              :data-num="item.score"
+              @dragstart="startDrag($event, item)"
+            >
+              {{ item.title }}
+            </span>
             <span class="hint"
               >優先度低 <img src="@/assets/Vector-1.png" alt="bottom"
             /></span>
           </div>
         </div>
-        <div class="sort-card yellow">
+        <div class="sort-card yellow number">
           <h3>開發 A 組的短衝辦清單</h3>
-          <div class="content">
+          <div class="content"
+            @drop="onDrop($event, 2)"
+            @dropenter.prevent
+            @dragover="overDrag($event)">
             <span class="hint">{{ sum }}/20點</span>
-            <div class="grid"></div>
-            <div class="grid"></div>
-            <div class="grid"></div>
-            <div class="grid"></div>
+            <!--  -->
+            <span
+              v-for="(item, index) in getList(2)"
+              :key="index"
+              :class="{'grid':true, 'active': item.id !== 0}"
+              draggable="true"
+              :data-sort="item.id"
+              :data-num="item.score"
+              @dragstart="startDrag($event, item)"
+            >
+              {{ item.title }}
+            </span>
+            <!--  -->
             <span class="hint"> </span>
           </div>
           <button type="button" class="pink-btn" @click="handleFinish">
@@ -254,7 +327,7 @@ const handleFinish = () => {
 .grid {
   position: relative;
 }
-.sort-card.number .grid:after {
+.sort-card.number .active:after {
   position: absolute;
   display: inline-block;
   content: attr(data-num);

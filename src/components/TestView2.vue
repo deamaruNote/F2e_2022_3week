@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 
 const props = defineProps({
   name: {
@@ -14,6 +14,12 @@ const props = defineProps({
 
 const step = ref(1);
 const model = ref(0);
+const step_list = reactive([
+  { text: "會員系統（登入、註冊、管理)", id: 0, type: false, sort: 0 },
+  { text: "後台職缺管理功能（資訊上架、下架、顯示應徵者資料）", id: 1, type: false, sort: 0 },
+  { text: "前台職缺列表（缺詳細內容、點選可發送應徵意願）", id: 2, type: false, sort: 0 },
+  { text: "應徵者的線上履歷編輯器", id: 3 },
+]);
 const handleStepsub = (val) => {
   step.value = val;
 };
@@ -22,9 +28,14 @@ const handleModal = () => {
 };
 const handleFinish = () => {
   model.value = 2;
-    // 這裡放檢查
-    // 對 => model = 2; 錯 => model = 1;
+  // 這裡放檢查
+  // 對 => model = 2; 錯 => model = 1;
 };
+
+//drag
+const onDrop = (dropResult) => {
+      this.items = applyDrag(this.items, dropResult);
+    }
 </script>
 <template>
   <div class="body">
@@ -49,9 +60,7 @@ const handleFinish = () => {
     <!-- TRUE -->
     <div class="modal" v-show="model === 2">
       <div class="chat-card">
-        <div class="content">
-          做得好啊！菜鳥！
-        </div>
+        <div class="content">做得好啊！菜鳥！</div>
         <button type="button" class="start-btn2" @click="props.handleStep(3)">
           謝謝
           <img src="@/assets/start_icon2.png" alt="start" />
@@ -101,11 +110,17 @@ const handleFinish = () => {
       </div>
       <div class="sort-card">
         <h3>產品待辦清單 ProductBacklog</h3>
+        <!-- <div class="content scattered">
+          <div class="grid active">會員系統（登入、註冊、管理)</div>
+          <div class="grid active">前台職缺列表（缺詳細內容、點選可發送應徵意願</div>
+          <div class="grid active">後台職缺管理功能（資訊上架、下架、顯示應徵者資料）</div>
+          <div class="grid active">應徵者的線上履歷編輯器</div>
+        </div> -->
         <div class="content">
           <span class="hint"
             >優先度高 <img src="@/assets/Vector.png" alt="top"
           /></span>
-          <div class="grid active">會員系統（登入、註冊、管理)</div>
+          <div class="grid"></div>
           <div class="grid"></div>
           <div class="grid"></div>
           <div class="grid"></div>
@@ -127,7 +142,31 @@ const handleFinish = () => {
   height: 20px;
   padding: 0;
 }
-.img img{
+.img img {
   height: 20px;
+}
+.content.scattered {
+  position: absolute;
+  // border: 1px solid red;
+}
+.content.scattered .grid {
+  position: fixed;
+  width: 400px;
+}
+.content.scattered .grid:first-child {
+  top: 55%;
+  left: 60%;
+}
+.content.scattered .grid:nth-child(2) {
+  top: 500px;
+  left: 10%;
+}
+.content.scattered .grid:nth-child(3) {
+  top: 550px;
+  left: 930px;
+}
+.content.scattered .grid:nth-child(4) {
+  top: 620px;
+  left: 900px;
 }
 </style>

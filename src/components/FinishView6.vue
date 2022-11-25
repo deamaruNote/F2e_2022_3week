@@ -7,18 +7,18 @@ const props = defineProps({
     required: true,
   },
   baise_data: {
-      type: Object,
-      required: true,
-  }
+    type: Object,
+    required: true,
+  },
 });
 const gender = ref("");
 gender.value = props.baise_data.gender;
 const step = ref(0);
 const now = new Date();
 const date = reactive({
-    month: now.getMonth() +1,
-    day: now.getDate(),
-})
+  month: now.getMonth() + 1,
+  day: now.getDate(),
+});
 const nextStep = () => {
   step.value = 2;
 };
@@ -53,12 +53,24 @@ const nextStep = () => {
     </div>
     <!-- 2 -->
     <div class="step container" v-show="step === 2">
+      <div class="btn-group">
+        <button type="button" class="btn disabled">
+          <img src="@/assets/phone.png" alt="picture" />
+        </button>
+        <button type="button" class="btn" @click="props.handleStep(0)">
+          <img src="@/assets/home.png" alt="home" />
+        </button>
+      </div>
       <div class="paper-card">
         <div class="logo"><img src="@/assets/six.png" alt="六角" /></div>
         <h3>結業證書</h3>
         <div class="gender">
-            <img v-if="gender === 'boy'" src="@/assets/man_boy_c.png" alt="boy">
-            <img v-if="gender === 'girl'" src="@/assets/man_girl_c.png" alt="girl">
+          <img v-if="gender === 'boy'" src="@/assets/man_boy_c.png" alt="boy" />
+          <img
+            v-if="gender === 'girl'"
+            src="@/assets/man_girl_c.png"
+            alt="girl"
+          />
         </div>
         <p>{{ props.baise_data.name }} 君</p>
         <p>於111年{{ date.month }}月{{ date.day }}日參加六角學院</p>
@@ -117,14 +129,14 @@ canvas {
   box-sizing: border-box;
   z-index: 0;
 }
-.gender{
-    position: absolute;
-    top: 100px;
-    left: 60px;
-    width: 100px;
+.gender {
+  position: absolute;
+  top: 100px;
+  left: 60px;
+  width: 100px;
 }
-.gender img{
-    width: 100%;
+.gender img {
+  width: 100%;
 }
 .logo {
   position: absolute;
@@ -175,5 +187,29 @@ p.sir img {
 }
 .audience img {
   width: 100%;
+}
+.btn-group {
+  position: absolute;
+  left: calc(50% + 300px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.btn-group .btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  filter: drop-shadow(0px 4px 10px rgba(116, 48, 48, 0.4));
+  cursor: pointer;
+  height: 80px;
+  aspect-ratio: 1;
+}
+.btn-group .btn.disabled {
+  cursor: not-allowed;
+}
+.btn-group .btn img {
+  margin-left: auto;
+  height: 70px;
+  width: 85px;
 }
 </style>
