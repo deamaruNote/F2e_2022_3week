@@ -31,7 +31,8 @@ const handleFinish = () => {
     question1: 2,
     question2: 1,
   };
-  const correct = radio === answer ? true : false;
+  const correct = (radio.question1 === answer.question1 && radio.question2 === answer.question2) ? true : false;
+  console.log(answer, radio);
   if (correct) {
     model.value = 2;
   } else {

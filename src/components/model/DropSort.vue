@@ -1,28 +1,33 @@
 <script setup>
-import { reactive } from "vue";
+import { ref } from "vue";
 
-const list = [
+const list = ref([
   { id: 0, name: "AAA", drag: false },
   { id: 1, name: "BBB", drag: false },
   { id: 2, name: "CCC", drag: false },
   { id: 3, name: "DDD", drag: false },
-];
+]);
+const hand_tem = ref(null);
+const current = ref(null);
 
 const dragStart = (event, index) => {
-    event.target.style.display = "none";
-    // list[index]['drag'] = true;
-    console.log(list[index])
+  hand_tem.value = index;
+  list.value[index]["drag"] = true;
 };
-const dragEnter = () => {};
-const onDrag = () => {};
-const dragOver = (event) => {
+const dragEnd = () => {
+  let remove_id = hand_tem.value;
+  let add_id = current.value;
+  let result = list.value;
+  [result[add_id], result[remove_id]] = [result[remove_id], result[add_id]];
+  
+  list.value.map((item) => (item.drag = false));
+};
+const dragOver = (event, index) => {
   event.preventDefault();
 };
-const dragEnd = (event) =>{
-    console.log("aaa")
-    event.target.style.display = "block";
+const dragEnter = (index) => {
+  current.value = index;
 };
-const dragLeave = () => {};
 </script>
 
 <template>
@@ -30,14 +35,12 @@ const dragLeave = () => {};
     <div
       v-for="(item, index) in list"
       :key="item.id"
-      :class="{'item':true, 'none': item.drag}"
+      :class="{ item: true, none: item.drag }"
       draggable="true"
       @dragstart="dragStart($event, index)"
-      @dragenter="dragEnter()"
-      @dragover="dragOver($event)"
-      @dragend="dragEnd($event)"
-      @dragleave="dragLeave()"
-      @drag="onDrag()"
+      @dragenter="dragEnter(index)"
+      @dragover="dragOver($event, index)"
+      @dragend="dragEnd"
     >
       {{ item.name }} {{ item.drag }}
     </div>
@@ -62,8 +65,8 @@ const dragLeave = () => {};
   cursor: grab;
   transition: all 0.2s ease-in;
 }
-.item.none{
-    display: none;
+.item.none {
+  opacity: 0;
 }
 .item:hover {
   transform: scale(1.02);

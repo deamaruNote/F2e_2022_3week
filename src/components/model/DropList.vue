@@ -25,7 +25,6 @@ export default {
       //
       const itemID = event.dataTransfer.getData("itemID");
       const item = items.value.find((ele) => ele.id == itemID);
-      console.log(item.list, list)
       item.list = list;
     };
     const overDrag = (event) => {

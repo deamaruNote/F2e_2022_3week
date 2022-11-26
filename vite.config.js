@@ -5,6 +5,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/F2e_2022_3week/',
   plugins: [vue()],
   resolve: {
     alias: {

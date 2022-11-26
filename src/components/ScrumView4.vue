@@ -20,10 +20,53 @@ const handleModal = () => {
   model.value = 0;
 };
 const handleFinish = () => {
-  if (1) {
+  // let result2 = step_list.map(item => {return item.text});
+  let result = step_list
+    .map((item) => {
+      return item.id;
+    })
+    .slice(0, 3);
+  let answer = [5, 3, 4];
+  if (
+    result.every((item, id) => {
+       return item === answer[id];
+    })
+  ) {
     model.value = 2;
   } else {
     model.value = 1;
+  }
+};
+// -----------DRAG-------------- //
+const step_list = reactive([
+  { id: 0, do: false, drag: false, text: "" },
+  { id: 1, do: false, drag: false, text: "" },
+  { id: 2, do: false, drag: false, text: "" },
+  { id: 3, do: true, drag: false, text: "短衝檢視會議 Sprint Review" },
+  { id: 4, do: true, drag: false, text: "短衝自省會議 Sprint Retrospective" },
+  { id: 5, do: true, drag: false, text: "每日站立會議(Daily Scrum)" },
+]);
+
+const hand_tem = ref(null);
+const current = ref(null);
+const dragStart = (index) => {
+  hand_tem.value = index;
+  step_list[index]["drag"] = true;
+};
+const dragEnd = () => {
+  let remove_id = hand_tem.value;
+  let add_id = current.value;
+  let result = step_list;
+  [result[add_id], result[remove_id]] = [result[remove_id], result[add_id]];
+
+  step_list.map((item) => (item.drag = false));
+};
+const dragOver = (event) => {
+  event.preventDefault();
+};
+const dragEnter = (index) => {
+  if (index < 3) {
+    current.value = index;
   }
 };
 </script>
@@ -161,21 +204,25 @@ const handleFinish = () => {
     <!-- 5 -->
     <div class="step container" v-show="step === 5">
       <div class="header-card yellow">
-        在這經典的 Scrum 流程圖中，<br>
+        在這經典的 Scrum 流程圖中，<br />
         這些流程分別代表哪一個會議呢？請把對應的流程拖曳到正確位置。
       </div>
       <div class="sort-card scrum">
         <h3>Scrum 流程圖</h3>
         <div class="content scrum">
-            <div class="grid active">
-              短衝檢視會議 Sprint Review
-            </div>
-            <div class="grid active">
-              短衝自省會議 SprintRetrospective
-            </div>
-            <div class="grid active">
-              每日站立會議(Daily Scrum)
-            </div>
+          <div
+            v-for="(item, index) in step_list"
+            :key="item.id"
+            :id="item.id"
+            :class="{ grid: true, active: item.do }"
+            :draggable="item.do"
+            @dragstart="dragStart(index)"
+            @dragenter="dragEnter(index)"
+            @dragover="dragOver($event)"
+            @dragend="dragEnd"
+          >
+            {{ item.text }}
+          </div>
         </div>
         <button type="button" class="pink-btn" @click="handleFinish">
           我完成了
@@ -215,25 +262,43 @@ const handleFinish = () => {
 .five-container {
   margin-top: -1730px;
 }
-.sort-card.scrum{
-    width: 80%;
-    padding: 10px 20px;
+.sort-card.scrum {
+  width: 80%;
+  padding: 10px 20px;
 }
-.sort-card.scrum .content{
-    flex-direction: row;
-    align-items: flex-end;
-    height: 260px;
-    padding-bottom: 40px;
-    background: url("@/assets/scrum.png");
-    background-size: 100%;
-    background-repeat: no-repeat;
+.sort-card.scrum .content {
+  flex-direction: row;
+  align-items: flex-end;
+  height: 260px;
+  padding-bottom: 40px;
+  background: url("@/assets/scrum.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
-.sort-card.scrum .content .grid{
-    flex:1;
-    font-size: 14px;
-    /* height: auto; */
+.sort-card.scrum .content .grid {
+  flex: 1;
+  font-size: 14px;
+  /* height: auto; */
 }
-.sort-card.scrum .content .grid:first-child{
-    transform: translate(170px, -170px);
+.sort-card.scrum .content .grid:first-child {
+  transform: translate(170px, -170px);
+}
+.sort-card.scrum .content .grid:nth-child(n + 4) {
+  position: absolute;
+}
+.sort-card.scrum .content .grid:nth-child(n + 4):not(.active) {
+  border: none;
+}
+.sort-card.scrum .content .grid:nth-child(4) {
+  right: 50px;
+  top: 150px;
+}
+.sort-card.scrum .content .grid:nth-child(5) {
+  right: 180px;
+  top: 200px;
+}
+.sort-card.scrum .content .grid:nth-child(6) {
+  right: -180px;
+  top: 250px;
 }
 </style>

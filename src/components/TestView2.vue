@@ -14,12 +14,6 @@ const props = defineProps({
 
 const step = ref(1);
 const model = ref(0);
-const step_list = reactive([
-  { text: "會員系統（登入、註冊、管理)", id: 0, type: false, sort: 0 },
-  { text: "後台職缺管理功能（資訊上架、下架、顯示應徵者資料）", id: 1, type: false, sort: 0 },
-  { text: "前台職缺列表（缺詳細內容、點選可發送應徵意願）", id: 2, type: false, sort: 0 },
-  { text: "應徵者的線上履歷編輯器", id: 3 },
-]);
 const handleStepsub = (val) => {
   step.value = val;
 };
@@ -27,15 +21,64 @@ const handleModal = () => {
   model.value = 0;
 };
 const handleFinish = () => {
-  model.value = 2;
-  // 這裡放檢查
-  // 對 => model = 2; 錯 => model = 1;
+  const answer = [5, 4, 7, 6];
+  let sort_data = step_list
+    .map((item) => {
+      return item.id;
+    })
+    .slice(0, 4);
+  //
+  if (sort_data.every((item, index)=> item === answer[index]  )) {
+    model.value = 2;
+  } else {
+    model.value = 1;
+  }
 };
 
 //drag
-const onDrop = (dropResult) => {
-      this.items = applyDrag(this.items, dropResult);
-    }
+const step_list = reactive([
+  { id: 0, do: false, drag: false, text: "" },
+  { id: 1, do: false, drag: false, text: "" },
+  { id: 2, do: false, drag: false, text: "" },
+  { id: 3, do: false, drag: false, text: "" },
+  { id: 4, do: true, drag: false, text: "會員系統（登入、註冊、管理)" },
+  {
+    id: 5,
+    do: true,
+    drag: false,
+    text: "後台職缺管理功能（資訊上架、下架、顯示應徵者資料）",
+  },
+  {
+    id: 6,
+    do: true,
+    drag: false,
+    text: "前台職缺列表（缺詳細內容、點選可發送應徵意願）",
+  },
+  { id: 7, do: true, drag: false, text: "應徵者的線上履歷編輯器" },
+]);
+
+const hand_tem = ref(null);
+const current = ref(null);
+const dragStart = (index) => {
+  hand_tem.value = index;
+  step_list[index]["drag"] = true;
+};
+const dragEnd = () => {
+  let remove_id = hand_tem.value;
+  let add_id = current.value;
+  let result = step_list;
+  [result[add_id], result[remove_id]] = [result[remove_id], result[add_id]];
+
+  step_list.map((item) => (item.drag = false));
+};
+const dragOver = (event) => {
+  event.preventDefault();
+};
+const dragEnter = (index) => {
+  if (index < 4) {
+    current.value = index;
+  }
+};
 </script>
 <template>
   <div class="body">
@@ -110,20 +153,23 @@ const onDrop = (dropResult) => {
       </div>
       <div class="sort-card">
         <h3>產品待辦清單 ProductBacklog</h3>
-        <!-- <div class="content scattered">
-          <div class="grid active">會員系統（登入、註冊、管理)</div>
-          <div class="grid active">前台職缺列表（缺詳細內容、點選可發送應徵意願</div>
-          <div class="grid active">後台職缺管理功能（資訊上架、下架、顯示應徵者資料）</div>
-          <div class="grid active">應徵者的線上履歷編輯器</div>
-        </div> -->
         <div class="content">
           <span class="hint"
             >優先度高 <img src="@/assets/Vector.png" alt="top"
           /></span>
-          <div class="grid"></div>
-          <div class="grid"></div>
-          <div class="grid"></div>
-          <div class="grid"></div>
+          <div
+            v-for="(item, index) in step_list"
+            :key="item.id"
+            :id="item.id"
+            :class="{ grid: true, active: item.do }"
+            :draggable="item.do"
+            @dragstart="dragStart(index)"
+            @dragenter="dragEnter(index)"
+            @dragover="dragOver($event)"
+            @dragend="dragEnd"
+          >
+            {{ item.text }}
+          </div>
           <span class="hint"
             >優先度低 <img src="@/assets/Vector-1.png" alt="bottom"
           /></span>
@@ -145,27 +191,29 @@ const onDrop = (dropResult) => {
 .img img {
   height: 20px;
 }
-.content.scattered {
-  position: absolute;
-  // border: 1px solid red;
-}
-.content.scattered .grid {
+.content .grid:nth-child(n + 6) {
   position: fixed;
-  width: 400px;
+  width: 450px;
 }
-.content.scattered .grid:first-child {
+.content .grid:nth-child(n + 6):not(.active) {
+  border: none;
+}
+.content .grid.none {
+  opacity: 0.5;
+}
+.content .grid:nth-child(6) {
   top: 55%;
   left: 60%;
 }
-.content.scattered .grid:nth-child(2) {
+.content .grid:nth-child(7) {
   top: 500px;
   left: 10%;
 }
-.content.scattered .grid:nth-child(3) {
+.content .grid:nth-child(8) {
   top: 550px;
   left: 930px;
 }
-.content.scattered .grid:nth-child(4) {
+.content .grid:nth-child(9) {
   top: 620px;
   left: 900px;
 }
