@@ -8,7 +8,7 @@ cd dist
 
 git init
 git add -A 
-git commit -m "New Deployment"
+git commit -m "test"
 git push -f git@github.com:3q-cindy/F2e_2022_3week.git master:gh-pages
 
 cd -
