@@ -10,7 +10,7 @@ import Scrum from './components/ScrumView4.vue'
 import RetroView from './components/RetroView5.vue'
 import FinishView from './components/FinishView6.vue'
 import DropList from './components/model/DropSort.vue'
-const step = ref(0);
+const step = ref(4);
 const baise_data = reactive({name: "AAA", gender: "girl"});
 const handleStep = (num) => {
   step.value = num;
